@@ -22,6 +22,10 @@
 * Complexity: `T(n) = 2T(n/2) + O(n)`
     * n logn
 
+# Iterative fast solution
+
+* best solution in efficiency
+
 # Codes
 
 * [C code](../codes/maxsubarray.md)
