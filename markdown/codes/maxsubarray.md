@@ -1,4 +1,4 @@
-```c
+```cpp
 #include <stdio.h>
 #include <limits.h>
 

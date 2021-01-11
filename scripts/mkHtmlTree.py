@@ -21,7 +21,7 @@ def getFilesOfExtRelTo(exts, root):
 
 def getCodePrefix(path):
     extToSuffix = {
-        ".c": "c",
+        ".c": "cpp",
         ".py": "python",
         ".ts": "typescript",
         ".java": "java",
@@ -59,7 +59,7 @@ def runCommand(command):
     return (stdout, stderr)
 
 def pandoc_runner(src_root, src_path, dest_root, dest_path):
-    command = f"pandoc --highlight-style=tango -f markdown -t html5 {str(src_path)} -o {str(dest_path)} --lua-filter={str(luaFilter)}"
+    command = f"pandoc -s --highlight-style code_theme.theme -f markdown -t html5 {str(src_path)} -o {str(dest_path)} --lua-filter={str(luaFilter)}"
     runCommand(command.split(' '))
 
 mdToHtml = executorOnlyIfModifiedOrNotExists(pandoc_runner,
@@ -75,10 +75,9 @@ def convertToMd(src_root, src_path, dest_root, dest_path):
 codeToMd = executorOnlyIfModifiedOrNotExists(convertToMd,
                     codesRoot, mdRoot / "codes", ".md")
 
-mdFiles = getFilesOfExtRelTo([".md"], mdRoot)
-codeFiles = getFilesOfExtRelTo([".c", ".java", ".py", ".ts", ".js", ".cpp"], codesRoot)
 
 if __name__ == "__main__":
+    codeFiles = getFilesOfExtRelTo([".c", ".java", ".py", ".ts", ".js", ".cpp"], codesRoot)
     rebuilt = []
     for f in codeFiles:
         if codeToMd(f):
@@ -88,6 +87,7 @@ if __name__ == "__main__":
         for name in rebuilt:
             print(name)
 
+    mdFiles = getFilesOfExtRelTo([".md"], mdRoot)
     rebuilt = []
     for f in mdFiles:
         if mdToHtml(f):
