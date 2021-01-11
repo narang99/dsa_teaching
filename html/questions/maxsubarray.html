@@ -1,0 +1,31 @@
+<h1 id="maximum-subarray">Maximum Subarray</h1>
+<ul>
+<li>given array, find contiguous subarray with maximum sum</li>
+</ul>
+<h2 id="brute-force">Brute force</h2>
+<ul>
+<li>for all elements at index <code>i</code>, find the max subarray starting from <code>i</code> using linear scan</li>
+<li>do for all <code>i</code></li>
+<li>Complexity: <code>O(n^2)</code></li>
+</ul>
+<h2 id="optimized">optimized</h2>
+<ul>
+<li>uses divide and conquer</li>
+<li>find max subarray of the two half arrays using recursion (<strong>divide</strong>)</li>
+<li>find the cross subarray between the two arrays (the subarray with maximum sum going through mid)
+<ul>
+<li>complexity of finding cross sum: <code>O(n)</code></li>
+<li>start from mid, go left, return left for which <code>a[left...mid-1]</code> has greatest sum</li>
+<li>start from mid, go right, return right for which <code>a[mid...right]</code> has greatest sum</li>
+<li>cross sum is the sum of these two sums</li>
+</ul></li>
+<li>return max of the three sums (<strong>combine</strong>)</li>
+<li>Complexity: <code>T(n) = 2T(n/2) + O(n)</code>
+<ul>
+<li>n logn</li>
+</ul></li>
+</ul>
+<h1 id="codes">Codes</h1>
+<ul>
+<li><a href="../codes/maxsubarray.c">C code</a></li>
+</ul>

@@ -1,0 +1,69 @@
+<h1 id="questions">Questions</h1>
+<h2 id="insertion-sort">Insertion sort:</h2>
+<ul>
+<li>best case: array is already sorted, complexity is <code>O(n)</code> in this case</li>
+<li>worst case: array sorted in reverse order</li>
+</ul>
+<h2 id="merge-sort">Merge sort:</h2>
+<ul>
+<li>complexity of merging</li>
+<li>how <code>logn</code> comes
+<ul>
+<li>for size <code>n</code>, the array is repeatedly divided</li>
+<li>each division makes it half</li>
+<li>makes a tree of sorts</li>
+<li>we return when we have leaf</li>
+<li>so the height of tree <code>k</code>:</li>
+<li><code>2^k = n</code></li>
+<li><code>n = log k</code></li>
+</ul></li>
+<li>Recurrence relation:
+<ul>
+<li><code>T(n) = O(1)</code> if <code>n = 1</code></li>
+<li><code>T(n) = 2T(n/2) + O(n)</code> otherwise</li>
+</ul></li>
+</ul>
+<h2 id="binary-search">Binary search:</h2>
+<ul>
+<li>recurrence relation: <code>T(n) = T(n/2) + O(1)</code></li>
+<li>solving: <code>[n] + [n/2] + [n/4] + ...</code></li>
+<li><code>2^k = n</code> -&gt; <code>k = log n</code> terms in the expression</li>
+<li>constant work for each</li>
+<li>Therefore complexity: <code>log n</code></li>
+</ul>
+<h2 id="exercise-questions">Exercise questions</h2>
+<ul>
+<li>Q 2-1: Insertion sort inside merge sort Pg 40</li>
+<li>Q 2-4: counting inversions</li>
+</ul>
+<h2 id="methods-of-finding-complexity-bounds-for-recursive-equations">Methods of finding complexity bounds for recursive equations</h2>
+<ul>
+<li>use all these to find complexity of
+<ul>
+<li><code>T(n) = 2T(n/2) + cn</code></li>
+<li><code>T(n) = 2T(n/2) + c</code></li>
+</ul></li>
+</ul>
+<h3 id="substitution">Substitution</h3>
+<ul>
+<li>make guess</li>
+<li>prove it using induction</li>
+</ul>
+<h3 id="recursion-tree">Recursion tree</h3>
+<ul>
+<li>make a tree of the recursive invocation</li>
+<li>each node has a cost, is a point somewhere in the recursion</li>
+<li>the above cost is the work done in that node. example
+<ul>
+<li><code>T(n) = 2T(n/2) + cn</code></li>
+<li>here for node with <code>T(n)</code> the cost is <code>cn</code></li>
+<li>for node <code>T(n/2)</code> the cost is <code>cn/2</code></li>
+</ul></li>
+<li>sum up all costs of nodes in one level</li>
+<li>then sum up the total costs of all levels</li>
+<li><a href="./../../assets/rec_tree_complexity.png">Recursion Tree Example</a></li>
+</ul>
+<h3 id="masters-theorem">Masters theorem</h3>
+<ul>
+<li>wont cover now</li>
+</ul>
