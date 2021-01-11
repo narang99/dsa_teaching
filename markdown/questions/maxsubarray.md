@@ -24,4 +24,4 @@
 
 # Codes
 
-* [C code](../codes/maxsubarray.c)
+* [C code](../codes/maxsubarray.md)

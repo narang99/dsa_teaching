@@ -8,4 +8,7 @@
   3. get their result
   4. **combine** them
 
-{% include ./questions/maxsubarray.md %}
+# Max Subarray Problem
+
+* Given an array, find the subarray with maximum sum
+* [Solution](../questions/maxsubarray.md)
