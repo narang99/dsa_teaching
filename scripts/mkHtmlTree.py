@@ -35,7 +35,7 @@ def getCodePrefix(path):
     return f"```{suffix}\n"
 
 def getCodeSuffix(path):
-    return "```"
+    return "\n```"
     
 def executorOnlyIfModifiedOrNotExists(callback, src_root, dest_root,
                 dest_suffix):
@@ -74,7 +74,6 @@ def convertToMd(src_root, src_path, dest_root, dest_path):
 
 codeToMd = executorOnlyIfModifiedOrNotExists(convertToMd,
                     codesRoot, mdRoot / "codes", ".md")
-
 
 if __name__ == "__main__":
     codeFiles = getFilesOfExtRelTo([".c", ".java", ".py", ".ts", ".js", ".cpp"], codesRoot)

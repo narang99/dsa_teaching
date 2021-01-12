@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>maxsubarray</title>
+  <title>mergesort</title>
   <style>
     html {
       line-height: 1.5;
@@ -149,71 +149,45 @@
   <![endif]-->
 </head>
 <body>
-<h1 id="maximum-subarray">Maximum Subarray</h1>
+<h1 id="merge-sort">Merge Sort</h1>
 <ul>
-<li>given array, find contiguous subarray with maximum sum</li>
+<li>Sorting algorithm for <code>O(nlogn)</code></li>
+<li>Example of divide and conquer strategy</li>
 </ul>
-<h2 id="brute-force">Brute force</h2>
+<h1 id="steps">Steps</h1>
 <ul>
-<li>for all elements at index <code>i</code>, find the max subarray starting from <code>i</code> using linear scan</li>
-<li>do for all <code>i</code></li>
-<li>Complexity: <code>O(n^2)</code></li>
+<li>Split the array in two halves</li>
+<li>recursively sort the left and the right arrays (<strong>divide</strong>)</li>
+<li>now we have two sorted arrays</li>
+<li>merge the sorted arrays into a new sorted array (<strong>combine</strong>)</li>
+<li>return the sorted array</li>
 </ul>
-<h2 id="optimized">Optimized</h2>
+<h2 id="merge">Merge</h2>
 <ul>
-<li>uses divide and conquer</li>
-<li>find max subarray of the two half arrays using recursion (<strong>divide</strong>)</li>
-<li>find the cross subarray between the two arrays (the subarray with maximum sum going through mid)
+<li>Merge is the main routine of the algorithm</li>
+<li>The problem is:
 <ul>
-<li>complexity of finding cross sum: <code>O(n)</code></li>
-<li>start from mid, go left, return left for which <code>a[left...mid-1]</code> has greatest sum</li>
-<li>start from mid, go right, return right for which <code>a[mid...right]</code> has greatest sum</li>
-<li>cross sum is the sum of these two sums</li>
+<li>You have two sorted arrays</li>
+<li>merge the two arrays into one and it should be sorted</li>
 </ul></li>
-<li>return max of the three sums (<strong>combine</strong>)</li>
-<li>Complexity: <code>T(n) = 2T(n/2) + O(n)</code>
+<li>The procedure of merging
 <ul>
-<li>n logn</li>
+<li>compare the elements at the head of both arrays</li>
+<li>if left array has smaller element, push it in output</li>
+<li>else push the element in right array</li>
+<li>Increment the head of the array from which you got the result</li>
 </ul></li>
 </ul>
-<h1 id="iterative-fast-solution">Iterative fast solution</h1>
+<h1 id="complexity">Complexity</h1>
 <ul>
-<li>best solution in efficiency</li>
-<li>This is not divide and conquer</li>
-</ul>
-<h2 id="steps">Steps</h2>
-<ul>
-<li>The basic idea is to maintain the maximum subarray ending with index <code>i</code> when you are processing index <code>i</code></li>
-<li>Would be clearer with an example</li>
-<li>Array: <code>[13, -3, -25, 20, -3, -16, -23, 18]</code></li>
-<li>Max subarrays for all elements:
-<ul>
-<li><code>13</code> : <code>[13]</code></li>
-<li><code>-3</code> : <code>[13, -3]</code></li>
-<li><code>-25</code>: <code>[13, -3, -25]</code></li>
-<li><code>20</code> : <code>[20]</code></li>
-<li><code>-3</code> : <code>[20, -3]</code></li>
-<li><code>-16</code>: <code>[20, -3, -16]</code></li>
-<li><code>-23</code>: <code>[20, -3, -16]</code></li>
-<li><code>18</code> : <code>[18]</code></li>
-</ul></li>
-<li>when we are checking for index <code>i</code>, we check if the sum of the subarray for index <code>i-1</code> is greater than 0 or not</li>
-<li>to find the maximum subarray <strong>ending</strong> at index <code>i</code> when we are given the maximum subarray <strong>ending</strong> at index <code>i-1</code>, we have <strong>two</strong> options:
-<ol type="1">
-<li>we can add this element to the maximum subarray ending at element <code>i-1</code></li>
-<li>we can ignore the previous maximum subarray sequence and just use this element as the maximum subarray</li>
-</ol></li>
-<li><strong>NOTE</strong> there is nothing else we can do</li>
-<li>so of the two steps above we need to get the subarray with the maximum sum
-<ul>
-<li>the new sum of subarray if we add <code>a[i]</code> is <code>prev_sum + a[i]</code></li>
-<li>if we keep the subarray as <code>a[i]</code>, the sum is <code>a[i]</code></li>
-<li>Therefore if <code>prev_sum + a[i]</code> &gt; <code>a[i]</code>, then we add the element, else we just keep the same element</li>
-</ul></li>
+<li>The arrays is split in half each time</li>
+<li>Merge is an <code>O(n)</code> operation</li>
+<li>recurrence relation: <code>T(n) = 2T(n/2) + O(n)</code></li>
+<li>The complexity of this relation is <code>O(nlogn)</code></li>
 </ul>
 <h1 id="codes">Codes</h1>
 <ul>
-<li><a href="../codes/MaxSubarray.html">Java</a></li>
+<li><a href="../codes/MergeSort.html">Java</a></li>
 </ul>
 </body>
 </html>

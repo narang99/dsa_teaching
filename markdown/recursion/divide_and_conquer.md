@@ -11,4 +11,14 @@
 # Max Subarray Problem
 
 * Given an array, find the subarray with maximum sum
-* [Solution](../questions/maxsubarray.md)
+* [Problem Description and Solution](../questions/maxsubarray.md)
+
+# Merge Sort
+
+* Given an array, sort it using merge sort
+* Classic example of divide and conquer
+* [Problem Description and Solution](../sorting/mergesort.md)
+
+# Heap Sort
+
+* This uses an important concept called [heaps](./heap.md)

@@ -1,4 +1,6 @@
-class MaxSubarray {
+package codes;
+
+public class MaxSubarray {
   /**
    * go through all elements 
    * for each element find the maximum subarray starting with it
@@ -80,6 +82,7 @@ class MaxSubarray {
         sum += arr[i];
       else
         sum = arr[i];
+
       if(maxsum < sum)
         maxsum = sum;
     }

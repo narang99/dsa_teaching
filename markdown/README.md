@@ -1,6 +1,7 @@
 # Table of Contents
 
 1. [Complexity Analysis](./complexity/README.md)
+2. [Recursion](./recursion/README.md)
 
 ## Topics and chapters in cormen
 * Complexity Analysis: 3,4
