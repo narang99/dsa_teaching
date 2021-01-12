@@ -66,7 +66,11 @@ mdToHtml = executorOnlyIfModifiedOrNotExists(pandoc_runner,
                     mdRoot, htmlRoot, '.html')
 
 def convertToMd(src_root, src_path, dest_root, dest_path):
-    with open(dest_path, "a") as writer:
+    # # Rewrite and make file empty
+    # with open(dest_path, "w") as writer:
+    #     pass
+    # open in append
+    with open(dest_path, "w") as writer:
         writer.write(getCodePrefix(src_path))
         with open(src_path, "r") as reader:
             writer.writelines(reader.readlines())

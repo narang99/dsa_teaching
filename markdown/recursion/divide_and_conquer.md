@@ -22,3 +22,16 @@
 # Heap Sort
 
 * This uses an important concept called [heaps](./heap.md)
+* There are multiple ways to sort using heaps.
+* Way 1: Create separate heap. Time Complexity `O(nlogn)`, space complexity `O(n)`
+  1. we can create a separate heap, and put all elements in the array in the heap.
+  2. Extract the elements one by one from heap
+  3. this will give sorted order
+Way 2: In place `heapsort`. We use the concepts of heap, Space Complexity `O(1)`, time complexity `O(nlogn)`. Go to [heaps](./heap.md) for more details
+  1. use `BuildHeap` on the array itself. now the array is a maxheap
+  2. take the first element out. put it in the end
+  3. decrease the heap size
+  4. Heap property is now not satisfied at first element
+  5. So call heapify on it. 
+  6. repeat till the end
+

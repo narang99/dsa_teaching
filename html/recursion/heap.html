@@ -225,6 +225,10 @@
 <li><strong>NOTE</strong> Array is <em>0-indexed</em> here</li>
 <li>The parent of node <code>i</code> is the node at <code>floor((i+1)/2)</code></li>
 <li>The left child of <code>i</code> is <code>2i+1</code> and right node is <code>2i+2</code></li>
+<li>We also maintain a <code>heap_size</code> property, whose use will be evident later in <code>HeapSort</code>
+<ul>
+<li>Basically in the array, we might want some elements in the end to be excluded from the heap. This property helps for that</li>
+</ul></li>
 </ul>
 <details>
 <summary>
@@ -232,22 +236,31 @@
 </summary>
 <div class="sourceCode" id="cb1"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Heap <span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">List</span><span class="op">&lt;</span><span class="bu">Integer</span><span class="op">&gt;</span> heap<span class="op">;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="fu">Heap</span><span class="op">(</span><span class="bu">List</span><span class="op">&lt;</span><span class="bu">Integer</span><span class="op">&gt;</span> arr<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// this.heap stores the array of level order traversal</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// heapify generates the correct level order traversal</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span> <span class="op">=</span> arr<span class="op">;</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">parent</span><span class="op">(</span><span class="dt">int</span> i<span class="op">)</span>  <span class="op">{</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>i<span class="op">+</span><span class="dv">1</span><span class="op">)/</span><span class="dv">2</span><span class="op">;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">leftChild</span><span class="op">(</span><span class="dt">int</span> i<span class="op">)</span>  <span class="op">{</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span><span class="op">*</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">rightChild</span><span class="op">(</span><span class="dt">int</span> i<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span><span class="op">*</span>i <span class="op">+</span> <span class="dv">2</span><span class="op">;</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="dt">int</span> heap_size<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="fu">Heap</span><span class="op">(</span><span class="bu">List</span><span class="op">&lt;</span><span class="bu">Integer</span><span class="op">&gt;</span> arr<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// this.heap stores the array of level order traversal</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// heapify generates the correct level order traversal</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span> <span class="op">=</span> arr<span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="fu">heap_size</span> <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">size</span><span class="op">();</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">parent</span><span class="op">(</span><span class="dt">int</span> i<span class="op">)</span>  <span class="op">{</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>i<span class="op">+</span><span class="dv">1</span><span class="op">)/</span><span class="dv">2</span><span class="op">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">leftChild</span><span class="op">(</span><span class="dt">int</span> i<span class="op">)</span>  <span class="op">{</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span><span class="op">*</span>i <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">rightChild</span><span class="op">(</span><span class="dt">int</span> i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span><span class="op">*</span>i <span class="op">+</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="dt">void</span> <span class="fu">swap</span><span class="op">(</span><span class="dt">int</span> index1<span class="op">,</span> <span class="dt">int</span> index2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> temp <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>index1<span class="op">);</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">set</span><span class="op">(</span>index1<span class="op">,</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>index2<span class="op">));</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">set</span><span class="op">(</span>index2<span class="op">,</span> temp<span class="op">);</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </details>
 <h2 id="question">Question</h2>
 <ul>
@@ -286,51 +299,49 @@
 <strong>Max heapify algorithm code</strong>
 </summary>
 <div class="sourceCode" id="cb2"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Heap <span class="op">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// other methods shown above skipped</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">maxheapify</span><span class="op">(</span><span class="dt">int</span> root<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// base case</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>root <span class="op">&gt;=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">size</span><span class="op">())</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> left <span class="op">=</span> <span class="fu">leftChild</span><span class="op">(</span>root<span class="op">);</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> right <span class="op">=</span> <span class="fu">rightChild</span><span class="op">(</span>root<span class="op">);</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// base case, root is leaf</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>left <span class="op">&gt;=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">size</span><span class="op">()</span> <span class="op">&amp;&amp;</span> right <span class="op">&gt;=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">size</span><span class="op">())</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// largest holds the index of the element</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// which holds the largest value among</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">// root, left and right</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> largest<span class="op">;</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>left <span class="op">&lt;</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">size</span><span class="op">()</span> <span class="op">&amp;&amp;</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>left<span class="op">)</span> <span class="op">&gt;</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>root<span class="op">)</span> <span class="op">&amp;&amp;</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>left<span class="op">)</span> <span class="op">&gt;=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>right<span class="op">))</span> <span class="op">{</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>      largest <span class="op">=</span> left<span class="op">;</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span><span class="op">(</span>right <span class="op">&lt;</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">size</span><span class="op">()</span> <span class="op">&amp;&amp;</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>right<span class="op">)</span> <span class="op">&gt;</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>root<span class="op">)</span> <span class="op">&amp;&amp;</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>right<span class="op">)</span> <span class="op">&gt;=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>left<span class="op">))</span> <span class="op">{</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        largest <span class="op">=</span> right<span class="op">;</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>      largest <span class="op">=</span> root<span class="op">;</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>largest <span class="op">!=</span> root<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>      <span class="co">// if largest value is at root, then the subtree rooted at root is already a valid maxheap</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>      <span class="co">// else we call recursively after swapping</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>      <span class="co">// swap</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>      <span class="dt">int</span> temp <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>largest<span class="op">);</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">set</span><span class="op">(</span>largest<span class="op">,</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>root<span class="op">));</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">set</span><span class="op">(</span>root<span class="op">,</span> temp<span class="op">);</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">maxheapify</span><span class="op">(</span>largest<span class="op">);</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">maxheapify</span><span class="op">(</span><span class="dt">int</span> root<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// base case</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>root <span class="op">&gt;=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap_size</span><span class="op">)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> left <span class="op">=</span> <span class="fu">leftChild</span><span class="op">(</span>root<span class="op">);</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> right <span class="op">=</span> <span class="fu">rightChild</span><span class="op">(</span>root<span class="op">);</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// base case, root is leaf</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>left <span class="op">&gt;=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap_size</span> <span class="op">&amp;&amp;</span> right <span class="op">&gt;=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap_size</span><span class="op">)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// largest holds the index of the element </span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// which holds the largest value among</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// root, left and right</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> largest<span class="op">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>left <span class="op">&lt;</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap_size</span> <span class="op">&amp;&amp;</span> </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>left<span class="op">)</span> <span class="op">&gt;</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>root<span class="op">)</span> <span class="op">&amp;&amp;</span> </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>left<span class="op">)</span> <span class="op">&gt;=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>right<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>      largest <span class="op">=</span> left<span class="op">;</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span><span class="op">(</span>right <span class="op">&lt;</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap_size</span> <span class="op">&amp;&amp;</span> </span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>right<span class="op">)</span> <span class="op">&gt;</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>root<span class="op">)</span> <span class="op">&amp;&amp;</span> </span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>right<span class="op">)</span> <span class="op">&gt;=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">get</span><span class="op">(</span>left<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        largest <span class="op">=</span> right<span class="op">;</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> </span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>      largest <span class="op">=</span> root<span class="op">;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>largest <span class="op">!=</span> root<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>      <span class="co">// if largest value is at root, then the subtree rooted at root is already a valid maxheap</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>      <span class="co">// else we call recursively after swapping</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>      <span class="fu">swap</span><span class="op">(</span>largest<span class="op">,</span> root<span class="op">);</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">maxheapify</span><span class="op">(</span>largest<span class="op">);</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </details>
+<ul>
+<li>Complexity of heapify: <code>O(h)</code>, where <code>h</code> is the height of the tree, the maximum height is essentially <code>log n</code></li>
+<li>therefore complexity is <code>O(log n)</code></li>
+</ul>
 <h1 id="heap-build">Heap build</h1>
 <ul>
 <li>We want to build the heap</li>
@@ -341,20 +352,67 @@
 <li>remember that the array is already in a level order traversal</li>
 <li>Therefore last node in the array is the last leaf of the tree</li>
 <li>So we start from the end of the array and then call heapify on each preceding element</li>
+<li>Complexity: <code>O(n)</code>. <strong>Prove This</strong></li>
 </ul>
 <details>
 <summary>
 <strong>Build Heap code</strong>
 </summary>
-<div class="sourceCode" id="cb3"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="kw">class</span> Heap <span class="op">{</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">buildMaxHeap</span><span class="op">()</span>  <span class="op">{</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>      <span class="co">// start heapify from children</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="co">// call on all</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i<span class="op">=</span><span class="kw">this</span><span class="op">.</span><span class="fu">heap</span><span class="op">.</span><span class="fu">size</span><span class="op">()-</span><span class="dv">1</span><span class="op">;</span> i <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">;</span> <span class="op">--</span>i<span class="op">)</span>  <span class="op">{</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">maxheapify</span><span class="op">(</span>i<span class="op">);</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Heap <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">buildMaxHeap</span><span class="op">()</span>  <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// start heapify from children</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// call on all</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i<span class="op">=</span><span class="kw">this</span><span class="op">.</span><span class="fu">heap_size</span><span class="op">-</span><span class="dv">1</span><span class="op">;</span> i <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">;</span> <span class="op">--</span>i<span class="op">)</span>  <span class="op">{</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">maxheapify</span><span class="op">(</span>i<span class="op">);</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<h2 id="heapsort">HeapSort</h2>
+<ul>
+<li>We have to sort the array using heaps</li>
+</ul>
+<h2 id="using-extra-space">Using extra space</h2>
+<ul>
+<li>We can create a separate heap (or a priority queue)</li>
+<li>We push all elements in the heap</li>
+<li>then we pop the elements and put them in the array</li>
+<li>For minheaps, the array will be sorted</li>
+<li>Complexity: <code>O(nlogn)</code></li>
+<li>Space complexity: <code>O(n)</code></li>
+</ul>
+<h2 id="in-constant-space">In constant space</h2>
+<ul>
+<li>We can do the sorting in-place</li>
+</ul>
+<ol type="1">
+<li>First we build the array in a max heap</li>
+<li>The element <code>this.heap[0]</code> is the maximum element in the heap now</li>
+<li>So we swap it to the end, ie <code>swap(0, last_index)</code></li>
+<li>Now this array is no longer a valid heap at index <code>0</code> where we swapped.</li>
+<li>So we call <code>maxheapify(0)</code> to make it a valid heap at index <code>0</code></li>
+<li>This would generally be it, a valid heap will form <strong>but</strong> the last element we just swapped in <strong>step 3</strong></li>
+</ol>
+<ul>
+<li>To prevent that we decrease the size of the heap by 1.</li>
+<li>now the last element wont be a part of the heap so <code>maxheapify</code> will leave it be</li>
+<li>On repeating the steps, we ll have the second largest element in the array at the top of the heap, so now we repeat the whole procedure of swapping and heapifying</li>
+</ul>
+<ol start="7" type="1">
+<li>We repeat the steps for all <code>i</code> in reverse order.</li>
+</ol>
+<details>
+<summary>
+<strong>Heap Sort Code</strong>
+</summary>
+<div class="sourceCode" id="cb4"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">heapSort</span><span class="op">()</span>  <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">buildMaxHeap</span><span class="op">();</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i<span class="op">=</span>heap_size<span class="op">-</span><span class="dv">1</span><span class="op">;</span> i <span class="op">&gt;</span> <span class="dv">0</span><span class="op">;</span> <span class="op">--</span>i<span class="op">)</span>  <span class="op">{</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">swap</span><span class="op">(</span>i<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      heap_size<span class="op">--;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">maxheapify</span><span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span></code></pre></div>
 </details>
 <h1 id="codes">Codes</h1>
 <ul>
