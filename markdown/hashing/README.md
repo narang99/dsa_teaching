@@ -207,3 +207,7 @@ class Solution {
 	}
 }
 ```
+
+# Codes
+
+* [Java](../codes/Hashing.md)
