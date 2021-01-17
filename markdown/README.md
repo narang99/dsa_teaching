@@ -2,6 +2,7 @@
 
 1. [Complexity Analysis](./complexity/README.md)
 2. [Recursion](./recursion/README.md)
+3. [Hashing](./hashing/README.md)
 
 ## Topics and chapters in cormen
 * Complexity Analysis: 3,4
