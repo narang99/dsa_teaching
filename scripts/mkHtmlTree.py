@@ -58,18 +58,17 @@ def runCommand(command):
     stdout, stderr = process.communicate()
     return (stdout, stderr)
 
-def pandoc_runner(src_root, src_path, dest_root, dest_path):
+def pandoc_command_run(src_path, dest_path):
     command = f"pandoc -s --highlight-style code_theme.theme -f markdown -t html5 {str(src_path)} -o {str(dest_path)} --lua-filter={str(luaFilter)}"
     runCommand(command.split(' '))
+
+def pandoc_runner(src_root, src_path, dest_root, dest_path):
+    pandoc_command_run(src_path, dest_path)
 
 mdToHtml = executorOnlyIfModifiedOrNotExists(pandoc_runner,
                     mdRoot, htmlRoot, '.html')
 
 def convertToMd(src_root, src_path, dest_root, dest_path):
-    # # Rewrite and make file empty
-    # with open(dest_path, "w") as writer:
-    #     pass
-    # open in append
     with open(dest_path, "w") as writer:
         writer.write(getCodePrefix(src_path))
         with open(src_path, "r") as reader:
@@ -78,6 +77,15 @@ def convertToMd(src_root, src_path, dest_root, dest_path):
 
 codeToMd = executorOnlyIfModifiedOrNotExists(convertToMd,
                     codesRoot, mdRoot / "codes", ".md")
+
+def makeIndexHtmlCallback(src_root, src_path, 
+        dest_root, dest_path):
+    indexMdPath = Path(src_path)
+    indexHtmlPath = Path(dest_path)
+    pandoc_command_run(indexMdPath, indexHtmlPath)
+
+makeIndexHtml = executorOnlyIfModifiedOrNotExists(
+    makeIndexHtmlCallback, Path("."), Path("."), ".html")
 
 if __name__ == "__main__":
     codeFiles = getFilesOfExtRelTo([".c", ".java", ".py", ".ts", ".js", ".cpp"], codesRoot)
@@ -99,3 +107,6 @@ if __name__ == "__main__":
     if(len(rebuilt) > 0):
         for name in rebuilt:
             print(name)
+
+    if makeIndexHtml(Path("./index.md")):
+        print("index.md")

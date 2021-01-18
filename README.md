@@ -12,6 +12,13 @@
 
 # Usage
 
+## Viewing Notes
+
+* open the HTML file `./index.html` in your browser
+
+
+## Adding to notes
+
 * If adding to notes, add in the [markdown folder](./markdown)
 * Once done, use command `make` to convert the markdown to html
 * For any code files, create it in the [codes folder](./codes)
