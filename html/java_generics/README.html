@@ -149,31 +149,28 @@
   <![endif]-->
 </head>
 <body>
-<h1 id="table-of-contents">Table of Contents</h1>
-<ol type="1">
-<li><a href="./complexity/README.html">Complexity Analysis</a></li>
-<li><a href="./recursion/README.html">Recursion</a></li>
-<li><a href="./hashing/README.html">Hashing</a></li>
-<li><a href="./java_generics/README.html">Java Generics</a></li>
-</ol>
-<h2 id="topics-and-chapters-in-cormen">Topics and chapters in cormen</h2>
+<h1 id="generics">Generics</h1>
 <ul>
-<li>Complexity Analysis: 3,4</li>
-<li>Graphs: 22,23,24,25</li>
-<li>Trees: 12,13,14</li>
-<li>Recursion: 4,9</li>
-<li>DP: 15</li>
-<li>Greedy: 16</li>
-<li>Hashing: 11</li>
-<li>sorting: 6,7,8</li>
-<li>searching</li>
-<li>stacks</li>
-<li>linked lists: elementary data structures</li>
+<li>This is a coding style used in Java, C++, TypeScript etc</li>
 </ul>
-<h2 id="done">done</h2>
+<h1 id="need-for-generic-code">Need for Generic Code</h1>
 <ul>
-<li>3,4 (complexity)</li>
-<li>4 (recursion)</li>
+<li>Consider the example of the <code>ArrayList</code> container in Java</li>
+<li>This container stores a list of elements efficiently as an array</li>
+<li>We can ourselves make an <code>ArrayList</code> implementation using a simple array. But how would we specify the type of the array?</li>
+<li>How would we make it so that you can store any type of element in the list?</li>
+<li>Normally if we use an array, we have to specify a type, eg <code>int[]</code>, <code>String[]</code> etc</li>
+<li>This is where generic code comes in
+<ul>
+<li>When you specify <code>ArrayList&lt;Integer&gt;</code>, the library creates an array of type <code>Integer</code> internally</li>
+<li>This would not be possible without generics</li>
+</ul></li>
+<li>Go to <a href="./ArrayList.html">ArrayList Implementation</a> before going to next section</li>
+</ul>
+<h1 id="generic-hashmap">Generic HashMap</h1>
+<ul>
+<li><a href="../codes/HashMapUsingCast.html">HashMap using Object Casting</a></li>
+<li><a href="../hashing/GenericHashMap.html">Generic HashMap example</a></li>
 </ul>
 </body>
 </html>

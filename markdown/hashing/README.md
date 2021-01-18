@@ -211,3 +211,5 @@ class Solution {
 # Codes
 
 * [Java](../codes/Hashing.md)
+* [Generic HashMap using Casting](../codes/HashMapUsingCast.md)
+* [Generic HashMap using templates](./GenericHashMap.md)
