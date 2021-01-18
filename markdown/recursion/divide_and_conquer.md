@@ -35,3 +35,122 @@ Way 2: In place `heapsort`. We use the concepts of heap, Space Complexity `O(1)`
   5. So call heapify on it. 
   6. repeat till the end
 
+# Height of binary tree
+
+* Given a tree, find its height
+
+## Steps
+* height of a node is `1 + max(height(left), height(right))`
+* use recursion
+* height depends on left and right child, recursilvely call. **divide** phase
+* take max of both and add `1`. **Combine** phase
+
+<details>
+<summary> Code for Tree height </summary>
+
+```java
+int height(Node root) {
+  if(root == null)
+    return 0;
+  int left_height = height(root.left);
+  int right_height = height(root.right);
+
+  // max + 1
+  if(left_height > right_height)
+    return left_height + 1;
+  else
+    return right_height + 1; 
+}
+```
+
+</details>
+
+# Tower of hanoi
+
+* you have three rods, and `n` rings in the first rod. Each ring is of different size
+* Initially the rings are placed on the first rod in an increasing radius order, with the smallest ring at the top
+* You can only put a smaller ring above a bigger ring
+* It is not allowed to put a bigger ring over a smaller ring
+* Find number of steps required to put all `n` rings on the third rod such that you never put a bigger ring over a smaller ring
+
+## Solution
+
+* To put `n` rings on the third rod from the first rod, you first put `n-1` rings on the second rod
+* Then you put the remaining last ring on the third rod
+* Now you place the `n-1` rings on the second rod to the third rod
+* If `T(x)` gives the number of steps required to put `x` rings from one tower to another, our relation is:
+  * `T(n) = T(n-1) + 1 + T(n-1)`
+  * `T(n) = 2T(n-1) + 1`
+
+<details>
+<summary>Recurrence relation solve</summary>
+
+* To solve: `T(n) = 2T(n-1) + 1`
+* By manually counting: `T(1) = 1`, `T(2) = 3`
+* the solution can be guessed to be `2^n - 1`
+* Substituting the guess we have:
+  * LHS: `2^n - 1`
+  * RHS: `2 * (2^(n-1)-1) + 1 = 2^n - 2 + 1` = `2^n - 1`
+  * LHS = RHS.
+  * Hence, `2^n - 1` is the answer.
+
+</details>
+
+
+
+<details>
+<summary>Code for Tower of Hanoi</summary>
+
+```java
+int hanoi_tower(int n) {
+  if(n == 1)
+    return 1;
+  return 2*hanoi_tower(n-1) + 1;
+}
+```
+
+</details>
+
+# x to the power y
+
+* an efficient way to find powers of numbers
+* powers have to be `int`. `x` can be float
+
+## Standard way
+
+* easy way is to multiply `x` with itself `y` times. The complexity if `O(y)`. This is inefficient 
+
+```java
+double product = 1.0;
+for(int i=0; i < y; ++i)  {
+  product *= x;
+}
+return product;
+```
+
+# Efficient using recursion
+
+* `x^y` is equal to:
+  * `x^(y/2) * x^(y/2)`, if `y` is even
+  * `x * x^(y-1)`, if `y` is odd
+* The complexity of the solution would be `O(log y)`, exponentially smaller than standard.
+* A very fast solution
+
+<details>
+<summary>Code for x raised to y</summary>
+
+```java
+float power(float x, int y) {
+  if(y == 0)
+    return 1;
+
+  if(y % 2 == 0)  {
+    float half_pow = power(x, y/2);
+    return half_pow * half_pow;
+  }
+  else 
+    return x * power(x, y-1);
+}
+```
+
+</details>
